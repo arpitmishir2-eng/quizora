@@ -1,0 +1,2829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QUIZORA - Challenge Your Mind</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+    radial-gradient(circle at top,#09234d 0%,#030712 45%,#000 100%);
+    color:white;
+    min-height:100vh;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    font-weight:800;
+}
+
+.hidden{
+    display:none!important;
+}
+
+header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    padding:12px 18px;
+    background:rgba(2,8,23,.94);
+    border-bottom:1px solid #123b70;
+    backdrop-filter:blur(12px);
+}
+
+.header-inner{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.brand img{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #00d9ff;
+    box-shadow:0 0 18px #00d9ff;
+}
+
+.brand-text h1{
+    color:#00eaff;
+    font-size:22px;
+}
+
+.brand-text p{
+    color:#91a8c7;
+    font-size:11px;
+}
+
+.stats{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.stat{
+    background:#08162d;
+    border:1px solid #16416e;
+    border-radius:12px;
+    padding:8px 11px;
+    font-size:13px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:25px 15px 60px;
+}
+
+.screen{
+    animation:fade .3s ease;
+}
+
+@keyframes fade{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+.hero{
+    text-align:center;
+    padding:40px 15px;
+}
+
+.hero-logo{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid #00eaff;
+    box-shadow:
+        0 0 20px #00eaff,
+        0 0 60px rgba(0,234,255,.3);
+    margin-bottom:20px;
+}
+
+.hero h2{
+    font-size:42px;
+    color:#00eaff;
+    text-shadow:0 0 20px rgba(0,234,255,.5);
+}
+
+.hero p{
+    color:#9bb4d3;
+    margin:8px 0 25px;
+}
+
+.main-btn{
+    background:linear-gradient(135deg,#00eaff,#0077ff);
+    color:#00101b;
+    padding:14px 28px;
+    border-radius:14px;
+    font-size:16px;
+    box-shadow:0 0 20px rgba(0,220,255,.35);
+    transition:.2s;
+}
+
+.main-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 0 30px rgba(0,220,255,.55);
+}
+
+.secondary-btn{
+    background:#102544;
+    color:white;
+    border:1px solid #24588b;
+    padding:12px 20px;
+    border-radius:12px;
+}
+
+.danger-btn{
+    background:#49152b;
+    color:#ff8aaa;
+    border:1px solid #a72d56;
+    padding:12px 20px;
+    border-radius:12px;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.section-title h2{
+    color:#00eaff;
+    font-size:30px;
+}
+
+.section-title p{
+    color:#8da6c6;
+    margin-top:6px;
+}
+
+.card-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.card{
+    background:linear-gradient(145deg,rgba(8,26,51,.96),rgba(3,10,25,.96));
+    border:1px solid #174b7d;
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 0 25px rgba(0,100,180,.12);
+}
+
+.card:hover{
+    border-color:#00dfff;
+}
+
+.difficulty-card{
+    text-align:center;
+    min-height:210px;
+}
+
+.difficulty-icon{
+    font-size:42px;
+    margin-bottom:12px;
+}
+
+.difficulty-card h3{
+    color:#00eaff;
+    margin-bottom:8px;
+}
+
+.difficulty-card p{
+    color:#91a8c7;
+    min-height:40px;
+    margin-bottom:18px;
+}
+
+.level-grid{
+    display:grid;
+    grid-template-columns:repeat(10,1fr);
+    gap:8px;
+}
+
+.level-btn{
+    padding:11px 5px;
+    border-radius:9px;
+    background:#091b35;
+    color:#8fa9c8;
+    border:1px solid #173d64;
+}
+
+.level-btn.unlocked{
+    color:#00eaff;
+    border-color:#008eb0;
+}
+
+.level-btn.completed{
+    background:#0c453c;
+    color:#55ffc9;
+    border-color:#16b994;
+}
+
+.level-btn.locked{
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.top-actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+
+.quiz-card{
+    max-width:850px;
+    margin:auto;
+}
+
+.quiz-info{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.info-box{
+    background:#071a31;
+    border:1px solid #17476f;
+    border-radius:12px;
+    padding:10px 14px;
+}
+
+.question{
+    font-size:30px;
+    text-align:center;
+    padding:30px 10px;
+    color:#fff;
+    min-height:130px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.answers{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.answer-btn{
+    background:#0a1e39;
+    color:#fff;
+    border:1px solid #24577f;
+    border-radius:13px;
+    padding:17px;
+    font-size:17px;
+    transition:.2s;
+}
+
+.answer-btn:hover{
+    border-color:#00eaff;
+    transform:translateY(-2px);
+}
+
+.answer-btn.correct{
+    background:#084b38;
+    border-color:#16e0a5;
+}
+
+.answer-btn.wrong{
+    background:#541c30;
+    border-color:#ff527f;
+}
+
+.timer{
+    height:8px;
+    background:#10243e;
+    border-radius:10px;
+    overflow:hidden;
+    margin:12px 0;
+}
+
+.timer-bar{
+    height:100%;
+    width:100%;
+    background:#00eaff;
+    transition:width 1s linear;
+}
+
+.result{
+    text-align:center;
+    max-width:650px;
+    margin:auto;
+}
+
+.result-score{
+    font-size:60px;
+    color:#00eaff;
+    font-weight:900;
+    margin:20px;
+}
+
+.stars{
+    font-size:35px;
+    margin:15px;
+}
+
+.shop-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.shop-card{
+    text-align:center;
+}
+
+.price{
+    font-size:32px;
+    color:#00eaff;
+    font-weight:900;
+    margin:10px;
+}
+
+.life-count{
+    font-size:22px;
+    color:#ff668c;
+    margin-bottom:15px;
+}
+
+.payment-box{
+    max-width:600px;
+    margin:25px auto;
+    text-align:center;
+}
+
+.payment-box h3{
+    color:#00eaff;
+    margin-bottom:15px;
+}
+
+.upi{
+    color:#42ff86;
+    font-size:22px;
+    font-weight:900;
+    margin:12px 0;
+    word-break:break-all;
+}
+
+.qr{
+    width:240px;
+    height:240px;
+    object-fit:contain;
+    background:white;
+    padding:8px;
+    border-radius:15px;
+    margin:15px auto;
+    display:block;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #315b82;
+    background:#061426;
+    color:white;
+    outline:none;
+    margin:7px 0;
+}
+
+input:focus{
+    border-color:#00eaff;
+}
+
+.payment-actions{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+
+.notice{
+    background:#101f35;
+    border-left:4px solid #00eaff;
+    padding:13px;
+    color:#a9bdd5;
+    font-size:13px;
+    line-height:1.5;
+    margin:15px 0;
+}
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.profile-stat{
+    text-align:center;
+}
+
+.profile-stat strong{
+    display:block;
+    font-size:28px;
+    color:#00eaff;
+    margin-bottom:5px;
+}
+
+.achievement-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:20px;
+}
+
+.achievement{
+    padding:18px;
+    border-radius:15px;
+    border:1px solid #17476e;
+    background:#07172b;
+}
+
+.achievement.unlocked{
+    border-color:#00dca6;
+    box-shadow:0 0 15px rgba(0,220,166,.15);
+}
+
+.achievement.locked{
+    opacity:.4;
+}
+
+.back{
+    margin-bottom:18px;
+}
+
+.free-box{
+    text-align:center;
+    background:linear-gradient(145deg,#071d36,#051024);
+    border:1px solid #17628b;
+    padding:20px;
+    border-radius:18px;
+    margin:20px 0;
+}
+
+.free-box h3{
+    color:#00eaff;
+}
+
+.countdown{
+    font-size:22px;
+    color:#55ffc9;
+    margin:10px;
+    font-weight:900;
+}
+
+footer{
+    text-align:center;
+    color:#607895;
+    padding:30px 10px;
+    border-top:1px solid #102e4c;
+    margin-top:30px;
+}
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:9999;
+    background:#071b31;
+    border:1px solid #00eaff;
+    color:white;
+    padding:15px 18px;
+    border-radius:12px;
+    max-width:330px;
+    box-shadow:0 0 25px rgba(0,220,255,.25);
+}
+
+@media(max-width:800px){
+    .card-grid,
+    .shop-grid{
+        grid-template-columns:1fr;
+    }
+
+    .profile-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .achievement-grid{
+        grid-template-columns:1fr;
+    }
+
+    .level-grid{
+        grid-template-columns:repeat(5,1fr);
+    }
+
+    .hero h2{
+        font-size:32px;
+    }
+
+    .question{
+        font-size:23px;
+    }
+}
+
+@media(max-width:500px){
+    .header-inner{
+        align-items:flex-start;
+    }
+
+    .brand-text h1{
+        font-size:18px;
+    }
+
+    .stats{
+        max-width:210px;
+    }
+
+    .stat{
+        font-size:11px;
+        padding:6px 8px;
+    }
+
+    .answers{
+        grid-template-columns:1fr;
+    }
+
+    .profile-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-inner">
+
+<div class="brand">
+<img src="logo.png" onerror="this.style.display='none'">
+<div class="brand-text">
+<h1>QUIZORA</h1>
+<p>Challenge Your Mind</p>
+</div>
+</div>
+
+<div class="stats">
+<div class="stat">❤️ <span id="headLives">20</span></div>
+<div class="stat">🪙 <span id="headCoins">0</span></div>
+<div class="stat">⭐ <span id="headStars">0</span></div>
+<div class="stat">🔥 <span id="headStreak">0</span></div>
+</div>
+
+</div>
+</header>
+
+
+<main class="container">
+
+<!-- HOME -->
+<section id="homeScreen" class="screen">
+
+<div class="hero">
+
+<img class="hero-logo" src="logo.png"
+     onerror="this.style.display='none'">
+
+<h2>QUIZORA</h2>
+
+<p>Challenge Your Mind • Learn • Think • Win</p>
+
+<button class="main-btn" onclick="showDifficulty()">
+PLAY NOW
+</button>
+
+</div>
+
+<div class="card-grid">
+
+<div class="card">
+<h3>🎯 300 Levels</h3>
+<p>Easy, Medium and Difficult with 100 levels each.</p>
+</div>
+
+<div class="card">
+<h3>🧠 6000 Questions</h3>
+<p>20 questions in every level.</p>
+</div>
+
+<div class="card">
+<h3>🏆 Achievements</h3>
+<p>Build your score, streak and stars.</p>
+</div>
+
+</div>
+
+<div class="free-box">
+
+<h3>🎁 FREE LIFE SYSTEM</h3>
+
+<p>First time: <b>20 Free Lives</b></p>
+
+<p id="freeStatus">
+You have free lives available.
+</p>
+
+<div id="freeCountdown" class="countdown"></div>
+
+</div>
+
+<div class="top-actions">
+
+<button class="secondary-btn" onclick="openProfile()">
+👤 PROFILE
+</button>
+
+<button class="secondary-btn" onclick="openShop()">
+❤️ GET LIVES
+</button>
+
+<button class="secondary-btn" onclick="openAchievements()">
+🏆 ACHIEVEMENTS
+</button>
+
+</div>
+
+</section>
+
+
+<!-- DIFFICULTY -->
+<section id="difficultyScreen" class="screen hidden">
+
+<div class="top-actions">
+<button class="secondary-btn" onclick="goHome()">← HOME</button>
+</div>
+
+<div class="section-title">
+<h2>SELECT DIFFICULTY</h2>
+<p>Choose any difficulty directly</p>
+</div>
+
+<div class="card-grid">
+
+<div class="card difficulty-card">
+
+<div class="difficulty-icon">🟢</div>
+
+<h3>EASY</h3>
+
+<p>Basic arithmetic and simple calculations.</p>
+
+<button class="main-btn"
+onclick="openLevels('easy')">
+START EASY
+</button>
+
+</div>
+
+
+<div class="card difficulty-card">
+
+<div class="difficulty-icon">🟡</div>
+
+<h3>MEDIUM</h3>
+
+<p>Mixed calculations and moderate problems.</p>
+
+<button class="main-btn"
+onclick="openLevels('medium')">
+START MEDIUM
+</button>
+
+</div>
+
+
+<div class="card difficulty-card">
+
+<div class="difficulty-icon">🔴</div>
+
+<h3>DIFFICULT</h3>
+
+<p>Advanced calculations and challenging questions.</p>
+
+<button class="main-btn"
+onclick="openLevels('difficult')">
+START DIFFICULT
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- LEVELS -->
+<section id="levelsScreen" class="screen hidden">
+
+<div class="top-actions">
+
+<button class="secondary-btn" onclick="showDifficulty()">
+← DIFFICULTY
+</button>
+
+<h2 id="levelsTitle">LEVELS</h2>
+
+</div>
+
+<div class="card">
+
+<div class="notice">
+Complete a level with at least <b>12/20</b> correct answers to unlock the next level.
+</div>
+
+<div id="levelGrid" class="level-grid"></div>
+
+</div>
+
+</section>
+
+
+<!-- QUIZ -->
+<section id="quizScreen" class="screen hidden">
+
+<div class="quiz-card">
+
+<div class="quiz-info">
+
+<div class="info-box">
+Level <b id="quizLevel">1</b>
+</div>
+
+<div class="info-box">
+Question <b id="questionNumber">1</b>/20
+</div>
+
+<div class="info-box">
+❤️ <b id="quizLives">0</b>
+</div>
+
+<div class="info-box">
+⏱️ <b id="timerText">30</b>s
+</div>
+
+</div>
+
+<div class="timer">
+<div id="timerBar" class="timer-bar"></div>
+</div>
+
+<div class="card">
+
+<div id="questionText" class="question">
+Question
+</div>
+
+<div id="answers" class="answers"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- RESULT -->
+<section id="resultScreen" class="screen hidden">
+
+<div class="card result">
+
+<h2 id="resultTitle">LEVEL COMPLETE</h2>
+
+<div id="resultScore" class="result-score">
+0/20
+</div>
+
+<div id="resultStars" class="stars">
+☆☆☆
+</div>
+
+<p id="resultMessage"></p>
+
+<div class="payment-actions">
+
+<button class="main-btn" onclick="nextLevelAfterResult()">
+CONTINUE
+</button>
+
+<button class="secondary-btn" onclick="showDifficulty()">
+DIFFICULTY
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SHOP -->
+<section id="shopScreen" class="screen hidden">
+
+<div class="top-actions">
+
+<button class="secondary-btn" onclick="goHome()">
+← HOME
+</button>
+
+<h2>❤️ GET LIVES</h2>
+
+</div>
+
+<div class="section-title">
+
+<h2>LIFE SHOP</h2>
+
+<p>Choose a package</p>
+
+</div>
+
+<div class="shop-grid">
+
+<div class="card shop-card">
+
+<h3>1 LIFE</h3>
+
+<div class="price">₹1</div>
+
+<div class="life-count">❤️ 1 Life</div>
+
+<button class="main-btn"
+onclick="selectPackage(1,1,'₹1 - 1 Life')">
+BUY
+</button>
+
+</div>
+
+
+<div class="card shop-card">
+
+<h3>10 LIVES</h3>
+
+<div class="price">₹5</div>
+
+<div class="life-count">❤️ 10 Lives</div>
+
+<button class="main-btn"
+onclick="selectPackage(5,10,'₹5 - 10 Lives')">
+BUY
+</button>
+
+</div>
+
+
+<div class="card shop-card">
+
+<h3>20 LIVES</h3>
+
+<div class="price">₹10</div>
+
+<div class="life-count">❤️ 20 Lives</div>
+
+<button class="main-btn"
+onclick="selectPackage(10,20,'₹10 - 20 Lives')">
+BUY
+</button>
+
+</div>
+
+</div>
+
+
+<div id="paymentBox"
+class="card payment-box hidden">
+
+<h3 id="paymentTitle">
+PAYMENT
+</h3>
+
+<div class="upi">
+8840511458@ptaxis
+</div>
+
+<p>
+❤️ <span id="selectedLives">1</span> Life
+</p>
+
+<img src="qr.jpg"
+class="qr"
+alt="QUIZORA Payment QR">
+
+<div class="payment-actions">
+
+<button class="main-btn"
+onclick="payNow()">
+💳 PAY NOW
+</button>
+
+<button class="secondary-btn"
+onclick="copyUPI()">
+📋 COPY UPI
+</button>
+
+</div>
+
+<div class="notice">
+
+1. PAY NOW से payment करें।<br>
+2. Payment के बाद अपना Transaction ID / UTR डालें।<br>
+3. SUBMIT PAYMENT दबाएँ।<br>
+4. Payment verify होने के बाद Google Sheet में Status को APPROVED किया जाएगा।<br>
+5. फिर CHECK PAYMENT STATUS दबाएँ।
+
+</div>
+
+<input
+id="transactionId"
+placeholder="Enter Transaction ID / UTR">
+
+<div class="payment-actions">
+
+<button class="main-btn"
+onclick="submitPayment()">
+SUBMIT PAYMENT
+</button>
+
+<button class="secondary-btn"
+onclick="checkPayment()">
+CHECK PAYMENT STATUS
+</button>
+
+</div>
+
+<p id="paymentStatus"
+style="margin-top:15px;color:#8feeff;">
+</p>
+
+</div>
+
+</section>
+
+
+<!-- PROFILE -->
+<section id="profileScreen" class="screen hidden">
+
+<div class="top-actions">
+
+<button class="secondary-btn" onclick="goHome()">
+← HOME
+</button>
+
+<h2>👤 PLAYER PROFILE</h2>
+
+</div>
+
+<div class="profile-grid">
+
+<div class="card profile-stat">
+<strong id="profileStars">0</strong>
+Stars
+</div>
+
+<div class="card profile-stat">
+<strong id="profileCoins">0</strong>
+Coins
+</div>
+
+<div class="card profile-stat">
+<strong id="profileStreak">0</strong>
+Best Streak
+</div>
+
+<div class="card profile-stat">
+<strong id="profileLevels">0</strong>
+Completed Levels
+</div>
+
+</div>
+
+<div class="card" style="margin-top:20px">
+
+<h3 style="color:#00eaff;margin-bottom:15px;">
+DIFFICULTY PROGRESS
+</h3>
+
+<p>🟢 Easy:
+<b id="easyProgress">0</b>/100</p>
+
+<p>🟡 Medium:
+<b id="mediumProgress">0</b>/100</p>
+
+<p>🔴 Difficult:
+<b id="difficultProgress">0</b>/100</p>
+
+</div>
+
+</section>
+
+
+<!-- ACHIEVEMENTS -->
+<section id="achievementScreen" class="screen hidden">
+
+<div class="top-actions">
+
+<button class="secondary-btn" onclick="goHome()">
+← HOME
+</button>
+
+<h2>🏆 ACHIEVEMENTS</h2>
+
+</div>
+
+<div id="achievementGrid"
+class="achievement-grid"></div>
+
+</section>
+
+
+</main>
+
+
+<footer>
+QUIZORA • Challenge Your Mind<br>
+LEARN • THINK • WIN
+</footer>
+
+
+<div id="toast" class="toast hidden"></div>
+
+
+<script>
+
+/* =====================================================
+   QUIZORA CONFIGURATION
+===================================================== */
+
+const UPI_ID = "8840511458@ptaxis";
+
+const PAYMENT_API_URL =
+"https://script.google.com/macros/s/AKfycbzbSMcXSpPt2nvhq_0kuPb0Z10csD_X17TDx9QkimvSpDQMniJ5AVTOXVJLqy_VeY2g/exec";
+
+const DATA_KEY = "QUIZORA_DATA_FINAL";
+
+const QUESTIONS_PER_LEVEL = 20;
+
+const PASS_SCORE = 12;
+
+const FIRST_FREE_LIVES = 20;
+
+const FREE_AFTER_ZERO = 5;
+
+const FREE_WAIT =
+24 * 60 * 60 * 1000;
+
+const QUESTION_TIME = 30;
+
+
+/* =====================================================
+   GAME DATA
+===================================================== */
+
+let data = loadData();
+
+let currentDifficulty = "";
+
+let currentLevel = 1;
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let currentQuestions = [];
+
+let timer = null;
+
+let timeLeft = QUESTION_TIME;
+
+let selectedPackage = null;
+
+
+/* =====================================================
+   DEFAULT DATA
+===================================================== */
+
+function defaultData(){
+
+    return {
+
+        firstRun:true,
+
+        lives:FIRST_FREE_LIVES,
+
+        coins:0,
+
+        stars:0,
+
+        streak:0,
+
+        bestStreak:0,
+
+        bestScore:0,
+
+        zeroLivesAt:null,
+
+        lastFreeReward:null,
+
+        completed:{
+
+            easy:0,
+
+            medium:0,
+
+            difficult:0
+
+        },
+
+        achievements:[],
+
+        submittedTransactions:[]
+
+    };
+
+}
+
+
+/* =====================================================
+   LOAD / SAVE
+===================================================== */
+
+function loadData(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(DATA_KEY);
+
+        if(saved){
+
+            return {
+                ...defaultData(),
+                ...JSON.parse(saved)
+            };
+
+        }
+
+    }catch(e){}
+
+    const fresh = defaultData();
+
+    localStorage.setItem(
+        DATA_KEY,
+        JSON.stringify(fresh)
+    );
+
+    return fresh;
+}
+
+
+function saveData(){
+
+    localStorage.setItem(
+        DATA_KEY,
+        JSON.stringify(data)
+    );
+
+    updateHeader();
+
+}
+
+
+/* =====================================================
+   SCREEN SYSTEM
+===================================================== */
+
+function hideAll(){
+
+    document.querySelectorAll(".screen")
+    .forEach(s => s.classList.add("hidden"));
+
+}
+
+
+function showScreen(id){
+
+    hideAll();
+
+    document
+        .getElementById(id)
+        .classList.remove("hidden");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+function goHome(){
+
+    checkFreeRefill();
+
+    showScreen("homeScreen");
+
+    updateAll();
+
+}
+
+
+function showDifficulty(){
+
+    showScreen("difficultyScreen");
+
+    updateAll();
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+function updateHeader(){
+
+    document.getElementById("headLives")
+        .textContent = data.lives;
+
+    document.getElementById("headCoins")
+        .textContent = data.coins;
+
+    document.getElementById("headStars")
+        .textContent = data.stars;
+
+    document.getElementById("headStreak")
+        .textContent = data.streak;
+
+}
+
+
+/* =====================================================
+   FREE LIFE SYSTEM
+===================================================== */
+
+function checkFreeRefill(){
+
+    /*
+      Important:
+      timer starts when lives become ZERO.
+    */
+
+    if(data.lives > 0){
+
+        return false;
+
+    }
+
+    if(!data.zeroLivesAt){
+
+        data.zeroLivesAt = Date.now();
+
+        saveData();
+
+        return false;
+
+    }
+
+    const elapsed =
+        Date.now() - data.zeroLivesAt;
+
+    if(elapsed >= FREE_WAIT){
+
+        data.lives = FREE_AFTER_ZERO;
+
+        data.lastFreeReward = Date.now();
+
+        data.zeroLivesAt = null;
+
+        saveData();
+
+        toast(
+            "🎁 5 FREE LIVES added!"
+        );
+
+        return true;
+
+    }
+
+    return false;
+
+}
+
+
+function freeCountdown(){
+
+    const el =
+        document.getElementById("freeCountdown");
+
+    if(!el) return;
+
+    if(data.lives > 0){
+
+        el.textContent = "";
+
+        return;
+
+    }
+
+    if(!data.zeroLivesAt){
+
+        el.textContent =
+            "24-hour free-life timer starting...";
+
+        return;
+
+    }
+
+    const remaining =
+        FREE_WAIT -
+        (Date.now() - data.zeroLivesAt);
+
+    if(remaining <= 0){
+
+        checkFreeRefill();
+
+        return;
+
+    }
+
+    const hours =
+        Math.floor(
+            remaining / 3600000
+        );
+
+    const minutes =
+        Math.floor(
+            (remaining % 3600000) /
+            60000
+        );
+
+    const seconds =
+        Math.floor(
+            (remaining % 60000) /
+            1000
+        );
+
+    el.textContent =
+        `Next 5 Free Lives in ${hours}h ${minutes}m ${seconds}s`;
+
+}
+
+
+/* =====================================================
+   LEVEL SYSTEM
+===================================================== */
+
+function openLevels(difficulty){
+
+    currentDifficulty =
+        difficulty;
+
+    showScreen("levelsScreen");
+
+    document.getElementById("levelsTitle")
+        .textContent =
+        difficulty.toUpperCase() +
+        " • 100 LEVELS";
+
+    renderLevels();
+
+}
+
+
+function renderLevels(){
+
+    const grid =
+        document.getElementById("levelGrid");
+
+    grid.innerHTML = "";
+
+    const completed =
+        data.completed[currentDifficulty] || 0;
+
+    for(let i=1;i<=100;i++){
+
+        const btn =
+            document.createElement("button");
+
+        btn.className = "level-btn";
+
+        if(i <= completed){
+
+            btn.classList.add("completed");
+
+            btn.innerHTML =
+                "✓ " + i;
+
+        }else if(i === completed + 1){
+
+            btn.classList.add("unlocked");
+
+            btn.innerHTML =
+                "▶ " + i;
+
+        }else{
+
+            btn.classList.add("locked");
+
+            btn.innerHTML =
+                "🔒 " + i;
+
+        }
+
+        if(i <= completed + 1){
+
+            btn.onclick = () =>
+                startLevel(i);
+
+        }
+
+        grid.appendChild(btn);
+
+    }
+
+}
+
+
+/* =====================================================
+   LIFE SPEND
+===================================================== */
+
+function spendLife(){
+
+    checkFreeRefill();
+
+    if(data.lives <= 0){
+
+        openShop();
+
+        toast(
+            "❤️ No lives left. Get more lives."
+        );
+
+        return false;
+
+    }
+
+    data.lives--;
+
+    /*
+      Start 24h timer exactly when
+      lives become zero.
+    */
+
+    if(data.lives === 0){
+
+        data.zeroLivesAt =
+            Date.now();
+
+    }
+
+    saveData();
+
+    return true;
+
+}
+
+
+/* =====================================================
+   START LEVEL
+===================================================== */
+
+function startLevel(level){
+
+    if(!spendLife()){
+
+        return;
+
+    }
+
+    currentLevel = level;
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    currentQuestions =
+        generateQuestions(
+            currentDifficulty,
+            level
+        );
+
+    showScreen("quizScreen");
+
+    loadQuestion();
+
+}
+
+
+/* =====================================================
+   QUESTION GENERATOR
+===================================================== */
+
+function rand(min,max){
+
+    return Math.floor(
+        Math.random() *
+        (max-min+1)
+    ) + min;
+
+}
+
+
+function generateQuestions(
+    difficulty,
+    level
+){
+
+    const questions = [];
+
+    for(let i=0;i<QUESTIONS_PER_LEVEL;i++){
+
+        let a,b,answer,text;
+
+        if(difficulty === "easy"){
+
+            const type =
+                rand(1,4);
+
+            a = rand(1,20 + level);
+
+            b = rand(1,20 + level);
+
+            if(type === 1){
+
+                answer = a+b;
+
+                text =
+                    `${a} + ${b} = ?`;
+
+            }else if(type === 2){
+
+                if(b>a){
+                    [a,b] = [b,a];
+                }
+
+                answer = a-b;
+
+                text =
+                    `${a} − ${b} = ?`;
+
+            }else if(type === 3){
+
+                a = rand(2,15);
+
+                b = rand(2,12);
+
+                answer = a*b;
+
+                text =
+                    `${a} × ${b} = ?`;
+
+            }else{
+
+                b = rand(2,12);
+
+                answer = rand(2,15);
+
+                a = b*answer;
+
+                text =
+                    `${a} ÷ ${b} = ?`;
+
+            }
+
+        }
+
+        else if(difficulty === "medium"){
+
+            const type =
+                rand(1,5);
+
+            a =
+                rand(
+                    10,
+                    100 + level*5
+                );
+
+            b =
+                rand(
+                    5,
+                    50 + level*3
+                );
+
+            if(type === 1){
+
+                answer = a+b;
+
+                text =
+                    `${a} + ${b} = ?`;
+
+            }else if(type === 2){
+
+                if(b>a){
+                    [a,b] = [b,a];
+                }
+
+                answer = a-b;
+
+                text =
+                    `${a} − ${b} = ?`;
+
+            }else if(type === 3){
+
+                a = rand(5,30);
+
+                b = rand(5,20);
+
+                answer = a*b;
+
+                text =
+                    `${a} × ${b} = ?`;
+
+            }else if(type === 4){
+
+                b = rand(3,20);
+
+                answer = rand(5,30);
+
+                a = b*answer;
+
+                text =
+                    `${a} ÷ ${b} = ?`;
+
+            }else{
+
+                a = rand(10,50);
+
+                answer =
+                    Math.round(
+                        a * 1.5
+                    );
+
+                text =
+                    `What is 150% of ${a}?`;
+
+            }
+
+        }
+
+        else{
+
+            const type =
+                rand(1,6);
+
+            a =
+                rand(
+                    20,
+                    150 + level*10
+                );
+
+            b =
+                rand(
+                    10,
+                    100 + level*5
+                );
+
+            if(type === 1){
+
+                answer =
+                    a*a;
+
+                text =
+                    `${a}² = ?`;
+
+            }else if(type === 2){
+
+                answer =
+                    Math.sqrt(a);
+
+                const n =
+                    rand(5,30);
+
+                answer = n*n;
+
+                text =
+                    `√${answer} = ?`;
+
+                answer = n;
+
+            }else if(type === 3){
+
+                answer =
+                    a+b;
+
+                text =
+                    `${a} + ${b} = ?`;
+
+            }else if(type === 4){
+
+                if(b>a){
+                    [a,b] = [b,a];
+                }
+
+                answer =
+                    a-b;
+
+                text =
+                    `${a} − ${b} = ?`;
+
+            }else if(type === 5){
+
+                a = rand(10,50);
+
+                b = rand(10,30);
+
+                answer =
+                    a*b;
+
+                text =
+                    `${a} × ${b} = ?`;
+
+            }else{
+
+                b = rand(5,25);
+
+                answer = rand(10,40);
+
+                a = b*answer;
+
+                text =
+                    `${a} ÷ ${b} = ?`;
+
+            }
+
+        }
+
+        questions.push({
+            text,
+            answer
+        });
+
+    }
+
+    return questions;
+
+}
+
+
+/* =====================================================
+   LOAD QUESTION
+===================================================== */
+
+function loadQuestion(){
+
+    clearInterval(timer);
+
+    if(currentQuestion >= QUESTIONS_PER_LEVEL){
+
+        finishLevel();
+
+        return;
+
+    }
+
+    const q =
+        currentQuestions[currentQuestion];
+
+    document.getElementById("quizLevel")
+        .textContent =
+        currentLevel;
+
+    document.getElementById("questionNumber")
+        .textContent =
+        currentQuestion + 1;
+
+    document.getElementById("quizLives")
+        .textContent =
+        data.lives;
+
+    document.getElementById("questionText")
+        .textContent =
+        q.text;
+
+    createAnswers(q.answer);
+
+    startTimer();
+
+}
+
+
+/* =====================================================
+   ANSWERS
+===================================================== */
+
+function createAnswers(correct){
+
+    const container =
+        document.getElementById("answers");
+
+    container.innerHTML = "";
+
+    const options =
+        new Set();
+
+    options.add(correct);
+
+    while(options.size < 4){
+
+        let wrong =
+            correct +
+            rand(-10,10);
+
+        if(wrong < 0){
+
+            wrong =
+                Math.abs(wrong);
+
+        }
+
+        if(wrong !== correct){
+
+            options.add(wrong);
+
+        }
+
+    }
+
+    const shuffled =
+        [...options]
+        .sort(
+            () => Math.random()-.5
+        );
+
+    shuffled.forEach(value => {
+
+        const btn =
+            document.createElement("button");
+
+        btn.className =
+            "answer-btn";
+
+        btn.textContent =
+            value;
+
+        btn.onclick = () =>
+            answerQuestion(
+                value,
+                correct,
+                btn
+            );
+
+        container.appendChild(btn);
+
+    });
+
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function startTimer(){
+
+    timeLeft =
+        QUESTION_TIME;
+
+    updateTimer();
+
+    timer =
+        setInterval(() => {
+
+            timeLeft--;
+
+            updateTimer();
+
+            if(timeLeft <= 0){
+
+                clearInterval(timer);
+
+                answerQuestion(
+                    null,
+                    currentQuestions[currentQuestion].answer,
+                    null
+                );
+
+            }
+
+        },1000);
+
+}
+
+
+function updateTimer(){
+
+    document.getElementById("timerText")
+        .textContent =
+        timeLeft;
+
+    document.getElementById("timerBar")
+        .style.width =
+        ((timeLeft / QUESTION_TIME)*100)
+        + "%";
+
+}
+
+
+/* =====================================================
+   ANSWER QUESTION
+===================================================== */
+
+function answerQuestion(
+    selected,
+    correct,
+    clickedButton
+){
+
+    clearInterval(timer);
+
+    document.querySelectorAll(".answer-btn")
+    .forEach(btn => {
+        btn.disabled = true;
+    });
+
+    if(selected === correct){
+
+        score++;
+
+        if(clickedButton){
+
+            clickedButton.classList.add(
+                "correct"
+            );
+
+        }
+
+        /*
+          Time bonus
+        */
+
+        if(timeLeft >= 20){
+
+            data.coins += 5;
+
+        }else{
+
+            data.coins += 1;
+
+        }
+
+    }else{
+
+        if(clickedButton){
+
+            clickedButton.classList.add(
+                "wrong"
+            );
+
+        }
+
+        data.coins += 0;
+
+    }
+
+    saveData();
+
+    setTimeout(() => {
+
+        currentQuestion++;
+
+        loadQuestion();
+
+    },700);
+
+}
+
+
+/* =====================================================
+   FINISH LEVEL
+===================================================== */
+
+function finishLevel(){
+
+    clearInterval(timer);
+
+    const passed =
+        score >= PASS_SCORE;
+
+    let earnedStars = 0;
+
+    if(score >= 18){
+
+        earnedStars = 3;
+
+    }else if(score >= 15){
+
+        earnedStars = 2;
+
+    }else if(score >= PASS_SCORE){
+
+        earnedStars = 1;
+
+    }
+
+    if(passed){
+
+        const oldCompleted =
+            data.completed[currentDifficulty];
+
+        if(currentLevel >
+            oldCompleted){
+
+            data.completed[currentDifficulty] =
+                currentLevel;
+
+        }
+
+        data.stars += earnedStars;
+
+        data.streak++;
+
+        if(data.streak >
+           data.bestStreak){
+
+            data.bestStreak =
+                data.streak;
+
+        }
+
+        data.coins +=
+            20 + earnedStars*10;
+
+        if(score >
+           data.bestScore){
+
+            data.bestScore =
+                score;
+
+        }
+
+        checkAchievements();
+
+    }else{
+
+        data.streak = 0;
+
+    }
+
+    saveData();
+
+    document.getElementById("resultTitle")
+        .textContent =
+        passed
+        ? "🎉 LEVEL COMPLETE!"
+        : "❌ LEVEL FAILED";
+
+    document.getElementById("resultScore")
+        .textContent =
+        `${score}/${QUESTIONS_PER_LEVEL}`;
+
+    document.getElementById("resultStars")
+        .textContent =
+        "★".repeat(earnedStars) +
+        "☆".repeat(3-earnedStars);
+
+    document.getElementById("resultMessage")
+        .textContent =
+        passed
+        ? `Great job! Level ${currentLevel} completed.`
+        : `You need ${PASS_SCORE}/20 to unlock the next level.`;
+
+    showScreen("resultScreen");
+
+}
+
+
+/* =====================================================
+   NEXT LEVEL
+===================================================== */
+
+function nextLevelAfterResult(){
+
+    if(
+        data.completed[currentDifficulty]
+        >= currentLevel
+    ){
+
+        const next =
+            currentLevel + 1;
+
+        if(next <= 100){
+
+            openLevels(currentDifficulty);
+
+            return;
+
+        }
+
+    }
+
+    openLevels(currentDifficulty);
+
+}
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+function openProfile(){
+
+    showScreen("profileScreen");
+
+    document.getElementById("profileStars")
+        .textContent =
+        data.stars;
+
+    document.getElementById("profileCoins")
+        .textContent =
+        data.coins;
+
+    document.getElementById("profileStreak")
+        .textContent =
+        data.bestStreak;
+
+    document.getElementById("profileLevels")
+        .textContent =
+        data.completed.easy +
+        data.completed.medium +
+        data.completed.difficult;
+
+    document.getElementById("easyProgress")
+        .textContent =
+        data.completed.easy;
+
+    document.getElementById("mediumProgress")
+        .textContent =
+        data.completed.medium;
+
+    document.getElementById("difficultProgress")
+        .textContent =
+        data.completed.difficult;
+
+}
+
+
+/* =====================================================
+   SHOP
+===================================================== */
+
+function openShop(){
+
+    showScreen("shopScreen");
+
+    document.getElementById("paymentBox")
+        .classList.add("hidden");
+
+    document.getElementById("paymentStatus")
+        .textContent = "";
+
+}
+
+
+function selectPackage(
+    amount,
+    lives,
+    name
+){
+
+    selectedPackage = {
+
+        amount,
+        lives,
+        name
+
+    };
+
+    document.getElementById("paymentBox")
+        .classList.remove("hidden");
+
+    document.getElementById("paymentTitle")
+        .textContent =
+        `PAY ₹${amount} → ${lives} LIVES`;
+
+    document.getElementById("selectedLives")
+        .textContent =
+        lives;
+
+    document.getElementById("transactionId")
+        .value = "";
+
+    document.getElementById("paymentStatus")
+        .textContent =
+        "";
+
+    document.getElementById("paymentBox")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+
+/* =====================================================
+   UPI PAYMENT
+===================================================== */
+
+function payNow(){
+
+    if(!selectedPackage){
+
+        toast(
+            "Please select a package first."
+        );
+
+        return;
+
+    }
+
+    const url =
+        "upi://pay" +
+        "?pa=" +
+        encodeURIComponent(UPI_ID) +
+        "&pn=" +
+        encodeURIComponent("QUIZORA") +
+        "&am=" +
+        encodeURIComponent(
+            selectedPackage.amount
+        ) +
+        "&cu=INR" +
+        "&tn=" +
+        encodeURIComponent(
+            "QUIZORA Lives"
+        );
+
+    window.location.href = url;
+
+}
+
+
+/* =====================================================
+   COPY UPI
+===================================================== */
+
+async function copyUPI(){
+
+    try{
+
+        await navigator.clipboard.writeText(
+            UPI_ID
+        );
+
+        toast(
+            "✅ UPI ID copied!"
+        );
+
+    }catch(e){
+
+        toast(
+            "UPI ID: " + UPI_ID
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SUBMIT PAYMENT
+===================================================== */
+
+async function submitPayment(){
+
+    if(!selectedPackage){
+
+        toast(
+            "Please select a package."
+        );
+
+        return;
+
+    }
+
+    const transactionId =
+        document.getElementById(
+            "transactionId"
+        ).value.trim();
+
+    if(!transactionId){
+
+        toast(
+            "Please enter Transaction ID / UTR."
+        );
+
+        return;
+
+    }
+
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
+
+    status.textContent =
+        "Connecting to payment server...";
+
+    try{
+
+        const url =
+            PAYMENT_API_URL +
+            "?action=submit" +
+            "&package=" +
+            encodeURIComponent(
+                selectedPackage.name
+            ) +
+            "&amount=" +
+            encodeURIComponent(
+                selectedPackage.amount
+            ) +
+            "&lives=" +
+            encodeURIComponent(
+                selectedPackage.lives
+            ) +
+            "&upiId=" +
+            encodeURIComponent(
+                UPI_ID
+            ) +
+            "&transactionId=" +
+            encodeURIComponent(
+                transactionId
+            );
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+            );
+
+        const result =
+            await response.json();
+
+        if(result.success){
+
+            status.innerHTML =
+                "✅ Payment submitted.<br>" +
+                "Status: <b>PENDING</b><br>" +
+                "Please wait for payment approval.";
+
+            if(!data.submittedTransactions){
+
+                data.submittedTransactions = [];
+
+            }
+
+            if(
+                !data.submittedTransactions
+                .includes(transactionId)
+            ){
+
+                data.submittedTransactions
+                    .push(transactionId);
+
+            }
+
+            saveData();
+
+        }else{
+
+            status.textContent =
+                "❌ " +
+                (result.message ||
+                 "Submission failed.");
+
+        }
+
+    }catch(error){
+
+        status.innerHTML =
+            "❌ Connection error.<br>" +
+            "Please check your internet connection and Web App deployment.";
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   CHECK PAYMENT
+===================================================== */
+
+async function checkPayment(){
+
+    const transactionId =
+        document.getElementById(
+            "transactionId"
+        ).value.trim();
+
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
+
+    if(!transactionId){
+
+        toast(
+            "Enter Transaction ID / UTR first."
+        );
+
+        return;
+
+    }
+
+    status.textContent =
+        "Connecting... Checking payment status...";
+
+    try{
+
+        const url =
+            PAYMENT_API_URL +
+            "?action=claim" +
+            "&transactionId=" +
+            encodeURIComponent(
+                transactionId
+            );
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+            );
+
+        const result =
+            await response.json();
+
+        if(result.status === "CREDITED"){
+
+            if(result.lives > 0){
+
+                data.lives +=
+                    Number(result.lives);
+
+                /*
+                  If lives are added,
+                  zero timer must stop.
+                */
+
+                data.zeroLivesAt =
+                    null;
+
+                saveData();
+
+                status.innerHTML =
+                    `🎉 <b>${result.lives} Lives Added!</b>`;
+
+                toast(
+                    `❤️ ${result.lives} Lives added successfully!`
+                );
+
+                updateAll();
+
+            }else{
+
+                status.innerHTML =
+                    "ℹ️ This payment has already been credited.";
+
+            }
+
+        }else if(
+            result.status === "PENDING"
+        ){
+
+            status.innerHTML =
+                "⏳ Payment is still <b>PENDING</b>.<br>" +
+                "Please wait until it is approved.";
+
+        }else if(
+            result.status === "REJECTED"
+        ){
+
+            status.innerHTML =
+                "❌ Payment was rejected.";
+
+        }else{
+
+            status.innerHTML =
+                "❌ " +
+                (result.message ||
+                 "Transaction not found.");
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        status.innerHTML =
+            "❌ Connection error.<br>" +
+            "Google Apps Script response नहीं मिल रहा है.";
+
+    }
+
+}
+
+
+/* =====================================================
+   ACHIEVEMENTS
+===================================================== */
+
+const achievementList = [
+
+    {
+        id:"first",
+        icon:"🥇",
+        title:"First Victory",
+        desc:"Complete your first level.",
+        check:() =>
+            totalCompleted() >= 1
+    },
+
+    {
+        id:"ten",
+        icon:"🔥",
+        title:"10 Levels",
+        desc:"Complete 10 levels.",
+        check:() =>
+            totalCompleted() >= 10
+    },
+
+    {
+        id:"fifty",
+        icon:"🏆",
+        title:"50 Levels",
+        desc:"Complete 50 levels.",
+        check:() =>
+            totalCompleted() >= 50
+    },
+
+    {
+        id:"hundred",
+        icon:"👑",
+        title:"100 Levels",
+        desc:"Complete 100 levels.",
+        check:() =>
+            totalCompleted() >= 100
+    },
+
+    {
+        id:"perfect",
+        icon:"💎",
+        title:"Perfect Score",
+        desc:"Score 20/20.",
+        check:() =>
+            data.bestScore >= 20
+    },
+
+    {
+        id:"streak",
+        icon:"🔥",
+        title:"Streak Master",
+        desc:"Reach a 10 level streak.",
+        check:() =>
+            data.bestStreak >= 10
+    },
+
+    {
+        id:"master",
+        icon:"🧠",
+        title:"QUIZORA Master",
+        desc:"Complete 300 levels.",
+        check:() =>
+            totalCompleted() >= 300
+    }
+
+];
+
+
+function totalCompleted(){
+
+    return (
+        data.completed.easy +
+        data.completed.medium +
+        data.completed.difficult
+    );
+
+}
+
+
+function checkAchievements(){
+
+    if(!data.achievements){
+
+        data.achievements = [];
+
+    }
+
+    achievementList.forEach(a => {
+
+        if(
+            a.check() &&
+            !data.achievements
+                .includes(a.id)
+        ){
+
+            data.achievements.push(
+                a.id
+            );
+
+            toast(
+                `🏆 Achievement Unlocked: ${a.title}`
+            );
+
+        }
+
+    });
+
+    saveData();
+
+}
+
+
+function openAchievements(){
+
+    showScreen(
+        "achievementScreen"
+    );
+
+    renderAchievements();
+
+}
+
+
+function renderAchievements(){
+
+    const grid =
+        document.getElementById(
+            "achievementGrid"
+        );
+
+    grid.innerHTML = "";
+
+    achievementList.forEach(a => {
+
+        const unlocked =
+            data.achievements &&
+            data.achievements
+                .includes(a.id);
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "achievement " +
+            (
+                unlocked
+                ? "unlocked"
+                : "locked"
+            );
+
+        div.innerHTML = `
+
+            <div style="font-size:35px">
+                ${a.icon}
+            </div>
+
+            <h3 style="color:#00eaff;margin:8px 0">
+                ${a.title}
+            </h3>
+
+            <p style="color:#91a8c7">
+                ${a.desc}
+            </p>
+
+            <p style="margin-top:10px">
+                ${unlocked
+                    ? "✅ UNLOCKED"
+                    : "🔒 LOCKED"}
+            </p>
+
+        `;
+
+        grid.appendChild(div);
+
+    });
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function toast(message){
+
+    const el =
+        document.getElementById(
+            "toast"
+        );
+
+    el.textContent =
+        message;
+
+    el.classList.remove(
+        "hidden"
+    );
+
+    setTimeout(() => {
+
+        el.classList.add(
+            "hidden"
+        );
+
+    },3000);
+
+}
+
+
+/* =====================================================
+   UPDATE EVERYTHING
+===================================================== */
+
+function updateAll(){
+
+    checkFreeRefill();
+
+    updateHeader();
+
+    freeCountdown();
+
+    const freeStatus =
+        document.getElementById(
+            "freeStatus"
+        );
+
+    if(freeStatus){
+
+        if(data.lives > 0){
+
+            freeStatus.innerHTML =
+                `Current Lives: <b>${data.lives}</b>`;
+
+        }else{
+
+            freeStatus.innerHTML =
+                `❤️ Lives are 0. Your 24-hour free-life timer is active.`;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+updateAll();
+
+setInterval(() => {
+
+    checkFreeRefill();
+
+    freeCountdown();
+
+    updateHeader();
+
+},1000);
+
+</script>
+
+</body>
+</html>
